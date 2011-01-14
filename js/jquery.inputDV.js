@@ -39,11 +39,19 @@
         return this.each(function() {
             var t = $(this);
             
-            var val = opts.value || t.val();
+            var val = opts.default_value || opts.value || t.val();
             if (!val) { return; } // Input has no value and also we don't pass it as parameter, so do nothing
-            
-            t.val(val);
-            t.addClass(opts.default_class);
+
+            if (!opts.default_value) {
+              t.val(val);
+              t.addClass(opts.default_class);
+            }
+            else {
+              if($.trim(t.val()) == "") {
+                t.val(opts.default_value);
+                t.addClass(opts.default_class);
+              }
+            }
             
             t.focus(function() {
                 if (t.val() == val) {
@@ -63,7 +71,8 @@
     // Default options
     $.fn.inputDV.defaults = {
         default_class: 'default',
-        value: false
+        value: false,
+        default_value: false
     };
     
 })(jQuery);
